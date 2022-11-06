@@ -59,7 +59,7 @@ input {
   margin-top: 40px;
   color: #7cc5d9;
 }
-.welcome :is(h2, p) {
+.welcome :is(h2, p, img) {
   margin-bottom: 20px;
 }
 
