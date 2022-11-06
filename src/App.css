@@ -124,6 +124,7 @@ input {
   flex-grow: 1;
   background-color: white;
   color: #1c2c4c;
+  font-size: 1rem;
 }
 .send-message > input:placeholder {
   color: #ddd;
