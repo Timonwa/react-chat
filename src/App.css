@@ -116,7 +116,6 @@ input {
   display: flex;
 }
 .send-message > input {
-  /* width: calc(100% - 100px); */
   height: 40px;
   padding: 10px 10px;
   border-radius: 5px 0 0 5px;
