@@ -1,6 +1,6 @@
 # Building a Real-time Chat App with ReactJs and Firebase. :writing_hand:
 
-This is the code example for my article on [Building a Real-time Chat App with ReactJs and Firebase](https://blog.flycode.com/) for [FlyCode](https://www.flycode.com/). Here is the [live demo](https://react-chat-timonwa.vercel.app/).
+This is the code example for my article on [Building a Real-time Chat App with ReactJs and Firebase](https://freecodecamp.org/) for [FreeCodeCamp](https://freecodecamp.org/). Here is the [live demo](https://react-chat-timonwa.vercel.app/).
 
 ## Summary
 
