@@ -22,11 +22,14 @@ const ChatBox = () => {
     );
 
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-      let messages = [];
+      const fetchedMessages = [];
       QuerySnapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id });
+        fetchedMessages.push({ ...doc.data(), id: doc.id });
       });
-      setMessages(messages);
+      const sortedMessages = fetchedMessages.sort(
+        (a, b) => a.createdAt - b.createdAt
+      );
+      setMessages(sortedMessages);
     });
     return () => unsubscribe;
   }, []);
@@ -38,7 +41,7 @@ const ChatBox = () => {
           <Message key={message.id} message={message} />
         ))}
       </div>
-      {/* when a new message enters the chat, the screen scrolls dowwn to the scroll div */}
+      {/* when a new message enters the chat, the screen scrolls down to the scroll div */}
       <span ref={scroll}></span>
       <SendMessage scroll={scroll} />
     </main>
