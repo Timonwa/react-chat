@@ -2,6 +2,8 @@
 
 This is the code example for my article on [Building a Real-time Chat App with ReactJs and Firebase](https://www.freecodecamp.org/news/building-a-real-time-chat-app-with-reactjs-and-firebase/) for [FreeCodeCamp](https://freecodecamp.org/). Here is the [live demo](https://react-chat-timonwa.vercel.app/).
 
+Visit my blog, [Timonwa's Notes](https://blog.timonwa.com), for awesome technical contents like articles, codesnippets, tech goodies, community projects and more.
+
 ## Summary
 
 
