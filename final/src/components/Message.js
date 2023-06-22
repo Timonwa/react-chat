@@ -4,7 +4,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 const Message = ({ message }) => {
   const [user] = useAuthState(auth);
-  console.log(message.uid);
   return (
     <div
       className={`chat-bubble ${message.uid === user.uid ? "right" : ""}`}>

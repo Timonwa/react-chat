@@ -23,6 +23,7 @@ input {
   min-height: 100vh;
   background-color: #1c2c4c;
   color: #4c768d;
+  padding-top: 60px;
 }
 
 /* navbar */
@@ -34,6 +35,11 @@ input {
   background-color: #4c768d;
   color: #242443;
   height: 60px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
 .sign-in {
   border: none;
