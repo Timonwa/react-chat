@@ -15,7 +15,7 @@ const Welcome = () => {
   return (
     <main className="welcome">
       <div className="welcome-card">
-        <span className="welcome-tag">Demo refreshed for 2026</span>
+        <span className="welcome-tag">Demo refreshed on Feb 2026</span>
         <h2>Welcome to React Chat.</h2>
         <p>
           Sign in with Google to chat with fellow React developers in public or
@@ -26,21 +26,33 @@ const Welcome = () => {
         </button>
         <p className="welcome-disclaimer">
           <strong>New guide available:</strong> the refreshed walkthrough lives
-          on my blog. The original FreeCodeCamp guide still works, and the
-          legacy code remains on the{" "}
-          <span className="welcome-inline">freecodecamp-original</span> branch.{" "}
+          on my blog. The original{" "}
+          <a
+            href="https://www.freecodecamp.org/news/building-a-real-time-chat-app-with-reactjs-and-firebase/"
+            target="_blank"
+            rel="noreferrer">
+            FreeCodeCamp guide
+          </a>{" "}
+          still works, and the legacy code remains on the{" "}
+          <a
+            href="https://github.com/Timonwa/react-chat/tree/freecodecamp-original"
+            target="_blank"
+            rel="noreferrer">
+            freecodecamp-original
+          </a>{" "}
+          branch.{" "}
           <a href={blogUrl} target="_blank" rel="noreferrer">
             Read the updated guide
           </a>
         </p>
         <p className="welcome-disclaimer welcome-disclaimer--muted">
           Signing in stores your Google email, name, avatar, and messages in
-          Firebase so the chat can work. By testing this demo, you agree to
-          receive occasional tech updates from me. Details are in the{" "}
+          Firebase so the chat can work. By testing this demo, you agree to the{" "}
           <a href={termsUrl} target="_blank" rel="noreferrer">
-            Terms of use
+            terms of use
           </a>
-          .
+          . The data is used solely for demo purposes and will be deleted
+          periodically.
         </p>
       </div>
 

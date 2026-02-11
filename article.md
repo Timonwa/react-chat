@@ -585,17 +585,7 @@ The code for this project can be found on [GitHub](https://github.com/Timonwa/re
 ```txt
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
-    // Allow read/write access to messages 
-    match /messages/{messageId} {
-      allow read, write: if request.auth != null;
-    }
-    
-    // Allow read/write access to chat rooms
-    match /chatRooms/{chatRoomId}/{document=**} {
-      allow read, write: if request.auth != null;
-    }
-    
+  match /databases/{database}/documents {    
     // Allow read/write access to rooms
     match /rooms/{roomId} {
       allow read, write: if request.auth != null;
