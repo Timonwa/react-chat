@@ -43,6 +43,28 @@ const Welcome = () => {
           .
         </p>
       </div>
+
+      <div className="welcome-card">
+        <div className="demo-rooms">
+          <h3>Demo Private Rooms</h3>
+          <p>Try these pre-created private rooms to test the feature:</p>
+          <div className="room-codes">
+            <div className="room-code">
+              <strong>React Tips:</strong> <code>0695-RJ9I</code>
+            </div>
+            <div className="room-code">
+              <strong>Firebase Chat:</strong> <code>P8IB-A98Z</code>
+            </div>
+            <div className="room-code">
+              <strong>Modern UI:</strong> <code>64KN-6OXP</code>
+            </div>
+          </div>
+          <p className="room-code-note">
+            Copy any code above and paste it to join the room. These rooms are
+            public, so feel free to test and chat!
+          </p>
+        </div>
+      </div>
     </main>
   );
 };

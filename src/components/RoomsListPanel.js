@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -14,12 +13,12 @@ import {
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 
-const RoomsPanel = ({ activeRoomId, onSelectRoom }) => {
+const RoomsListPanel = ({ activeRoomId, onSelectRoom }) => {
   const [user] = useAuthState(auth);
   const [rooms, setRooms] = useState([]);
   const [memberships, setMemberships] = useState([]);
-  const [roomName, setRoomName] = useState("");
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
     const roomsQuery = query(collection(db, "rooms"), orderBy("createdAt"));
@@ -61,36 +60,28 @@ const RoomsPanel = ({ activeRoomId, onSelectRoom }) => {
     [memberships],
   );
 
-  const visibleRooms = useMemo(
-    () => rooms.filter(room => !room.isPrivate || membershipSet.has(room.id)),
-    [rooms, membershipSet],
-  );
+  const filteredRooms = useMemo(() => {
+    let filtered = rooms.filter(
+      room => !room.isPrivate || membershipSet.has(room.id),
+    );
 
-  const handleCreateRoom = async event => {
-    event.preventDefault();
-    const trimmed = roomName.trim();
-    if (!trimmed) {
-      return;
+    if (activeTab === "public") {
+      filtered = filtered.filter(room => !room.isPrivate);
+    } else if (activeTab === "private") {
+      filtered = filtered.filter(room => room.isPrivate);
     }
 
-    const newRoom = await addDoc(collection(db, "rooms"), {
-      name: trimmed,
-      isPrivate,
-      createdAt: serverTimestamp(),
-      createdBy: user?.uid ?? "anonymous",
-    });
-
-    if (isPrivate && user) {
-      await setDoc(doc(db, "memberships", `${newRoom.id}_${user.uid}`), {
-        roomId: newRoom.id,
-        uid: user.uid,
-        joinedAt: serverTimestamp(),
-      });
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        room =>
+          room.name.toLowerCase().includes(term) ||
+          (room.joinCode && room.joinCode.toLowerCase().includes(term)),
+      );
     }
 
-    setRoomName("");
-    setIsPrivate(false);
-  };
+    return filtered;
+  }, [rooms, membershipSet, activeTab, searchTerm]);
 
   const joinRoom = async (roomId, event) => {
     event.stopPropagation();
@@ -119,39 +110,39 @@ const RoomsPanel = ({ activeRoomId, onSelectRoom }) => {
   };
 
   return (
-    <aside className="rooms-panel">
-      <div className="rooms-panel__header">
+    <aside className="rooms-list-panel">
+      <div className="rooms-list-panel__header">
         <h2>Rooms</h2>
-        <p>Create a public hangout or a private chat.</p>
+        <div className="rooms-tabs">
+          <button
+            className={`rooms-tab ${activeTab === "all" ? "rooms-tab--active" : ""}`}
+            onClick={() => setActiveTab("all")}>
+            All
+          </button>
+          <button
+            className={`rooms-tab ${activeTab === "public" ? "rooms-tab--active" : ""}`}
+            onClick={() => setActiveTab("public")}>
+            Public
+          </button>
+          <button
+            className={`rooms-tab ${activeTab === "private" ? "rooms-tab--active" : ""}`}
+            onClick={() => setActiveTab("private")}>
+            Private
+          </button>
+        </div>
       </div>
 
-      <form className="room-create" onSubmit={handleCreateRoom}>
-        <label className="room-create__label" htmlFor="room-name">
-          Room name
-        </label>
+      <div className="rooms-search">
         <input
-          id="room-name"
           type="text"
-          value={roomName}
-          onChange={event => setRoomName(event.target.value)}
-          placeholder="Design Sprint"
-          maxLength={32}
+          placeholder="Search rooms..."
+          value={searchTerm}
+          onChange={event => setSearchTerm(event.target.value)}
         />
-        <label className="room-create__toggle">
-          <input
-            type="checkbox"
-            checked={isPrivate}
-            onChange={event => setIsPrivate(event.target.checked)}
-          />
-          Private room
-        </label>
-        <button type="submit" className="room-create__button">
-          Create room
-        </button>
-      </form>
+      </div>
 
       <div className="rooms-list">
-        {visibleRooms.map(room => {
+        {filteredRooms.map(room => {
           const isMember = membershipSet.has(room.id);
           const isActive = room.id === activeRoomId;
           return (
@@ -160,11 +151,14 @@ const RoomsPanel = ({ activeRoomId, onSelectRoom }) => {
               type="button"
               className={`room-card ${isActive ? "room-card--active" : ""}`}
               onClick={() => onSelectRoom(room)}>
-              <div>
+              <div className="room-card__content">
                 <p className="room-card__name">{room.name}</p>
-                <span className="room-card__meta">
-                  {room.isPrivate ? "Private" : "Public"}
-                </span>
+                <div className="room-card__meta">
+                  <span>{room.isPrivate ? "Private" : "Public"}</span>
+                  {room.isPrivate && room.joinCode && (
+                    <code className="room-card__code">{room.joinCode}</code>
+                  )}
+                </div>
               </div>
               {room.isPrivate ? (
                 isMember ? (
@@ -199,4 +193,4 @@ const RoomsPanel = ({ activeRoomId, onSelectRoom }) => {
   );
 };
 
-export default RoomsPanel;
+export default RoomsListPanel;

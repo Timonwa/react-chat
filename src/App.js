@@ -6,7 +6,8 @@ import "./App.css";
 import NavBar from "./components/NavBar";
 import ChatBox from "./components/ChatBox";
 import Welcome from "./components/Welcome";
-import RoomsPanel from "./components/RoomsPanel";
+import RoomsListPanel from "./components/RoomsListPanel";
+import RoomsActionsPanel from "./components/RoomsActionsPanel";
 
 function App() {
   const [user] = useAuthState(auth);
@@ -47,11 +48,12 @@ function App() {
         <Welcome />
       ) : (
         <div className="app-shell">
-          <RoomsPanel
+          <RoomsListPanel
             activeRoomId={activeRoom.id}
             onSelectRoom={setActiveRoom}
           />
           <ChatBox activeRoom={activeRoom} />
+          <RoomsActionsPanel onSelectRoom={setActiveRoom} />
         </div>
       )}
       <footer className="app-footer">
