@@ -579,3 +579,37 @@ And that's it on building a real-time chat app. We learnt how to use Firebase an
 The code for this project can be found on [GitHub](https://github.com/Timonwa/react-chat), and you can explore the chat room using this [live link](https://react-chat-timonwa.vercel.app/).
 
 <ConnectWithMe />
+
+## new rules
+
+```txt
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read/write access to messages 
+    match /messages/{messageId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow read/write access to chat rooms
+    match /chatRooms/{chatRoomId}/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow read/write access to rooms
+    match /rooms/{roomId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow read/write access to messages within rooms
+    match /rooms/{roomId}/messages/{messageId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow read/write access to memberships
+    match /memberships/{membershipId} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
