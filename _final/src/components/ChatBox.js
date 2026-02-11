@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   query,
   collection,
@@ -10,40 +10,65 @@ import { db } from "../firebase";
 import Message from "./Message";
 import SendMessage from "./SendMessage";
 
-const ChatBox = () => {
+const ChatBox = ({ activeRoom }) => {
   const [messages, setMessages] = useState([]);
-  const scroll = useRef();
+  const scroll = useRef(null);
+
+  const roomLabel = useMemo(() => {
+    if (!activeRoom?.name) {
+      return "Select a room";
+    }
+    return `${activeRoom.name}${activeRoom.isPrivate ? " · Private" : ""}`;
+  }, [activeRoom]);
 
   useEffect(() => {
+    if (!activeRoom?.id) {
+      setMessages([]);
+      return undefined;
+    }
+
     const q = query(
-      collection(db, "messages"),
-      orderBy("createdAt", "desc"),
-      limit(50)
+      collection(db, "rooms", activeRoom.id, "messages"),
+      orderBy("createdAt"),
+      limit(100),
     );
 
-    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-      const fetchedMessages = [];
-      QuerySnapshot.forEach((doc) => {
-        fetchedMessages.push({ ...doc.data(), id: doc.id });
-      });
-      const sortedMessages = fetchedMessages.sort(
-        (a, b) => a.createdAt - b.createdAt
-      );
-      setMessages(sortedMessages);
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const fetchedMessages = snapshot.docs.map(docSnapshot => ({
+        ...docSnapshot.data(),
+        id: docSnapshot.id,
+      }));
+      setMessages(fetchedMessages);
     });
-    return () => unsubscribe;
-  }, []);
+
+    return () => unsubscribe();
+  }, [activeRoom?.id]);
+
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <main className="chat-box">
+      <header className="chat-box__header">
+        <div>
+          <h2>{roomLabel}</h2>
+          <p>Share updates and keep the conversation moving.</p>
+        </div>
+      </header>
       <div className="messages-wrapper">
-        {messages?.map((message) => (
-          <Message key={message.id} message={message} />
-        ))}
+        {messages.length ? (
+          messages.map(message => (
+            <Message key={message.id} message={message} />
+          ))
+        ) : (
+          <div className="messages-empty">
+            <p>No messages yet. Start the conversation.</p>
+          </div>
+        )}
+        <span ref={scroll}></span>
       </div>
-      {/* when a new message enters the chat, the screen scrolls down to the scroll div */}
-      <span ref={scroll}></span>
-      <SendMessage scroll={scroll} />
+      <SendMessage scroll={scroll} roomId={activeRoom?.id} />
     </main>
   );
 };

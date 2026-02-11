@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 
-const SendMessage = () => {
+const SendMessage = ({ scroll, roomId, onSend }) => {
+  const [message, setMessage] = useState("");
+
+  const sendMessage = event => {
+    event.preventDefault();
+    const trimmed = message.trim();
+    if (!trimmed) {
+      alert("Enter valid message");
+      return;
+    }
+    if (!roomId) {
+      alert("Select a room to send messages");
+      return;
+    }
+    onSend?.(trimmed);
+    setMessage("");
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <form className="send-message">
+    <form onSubmit={sendMessage} className="send-message">
       <label htmlFor="messageInput" hidden>
         Enter Message
       </label>
@@ -10,10 +28,15 @@ const SendMessage = () => {
         id="messageInput"
         name="messageInput"
         type="text"
-        className="form-input__input"
         placeholder="type message..."
+        value={message}
+        onChange={e => setMessage(e.target.value)}
+        maxLength={500}
+        disabled={!roomId}
       />
-      <button type="submit">Send</button>
+      <button type="submit" disabled={!roomId}>
+        Send
+      </button>
     </form>
   );
 };

@@ -2,18 +2,23 @@ import React, { useState } from "react";
 import { auth, db } from "../firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
-const SendMessage = ({ scroll }) => {
+const SendMessage = ({ scroll, roomId }) => {
   const [message, setMessage] = useState("");
 
-  const sendMessage = async (event) => {
+  const sendMessage = async event => {
     event.preventDefault();
-    if (message.trim() === "") {
+    const trimmed = message.trim();
+    if (!trimmed) {
       alert("Enter valid message");
       return;
     }
+    if (!roomId) {
+      alert("Select a room to send messages");
+      return;
+    }
     const { uid, displayName, photoURL } = auth.currentUser;
-    await addDoc(collection(db, "messages"), {
-      text: message,
+    await addDoc(collection(db, "rooms", roomId, "messages"), {
+      text: trimmed,
       name: displayName,
       avatar: photoURL,
       createdAt: serverTimestamp(),
@@ -23,7 +28,7 @@ const SendMessage = ({ scroll }) => {
     scroll.current.scrollIntoView({ behavior: "smooth" });
   };
   return (
-    <form onSubmit={(event) => sendMessage(event)} className="send-message">
+    <form onSubmit={event => sendMessage(event)} className="send-message">
       <label htmlFor="messageInput" hidden>
         Enter Message
       </label>
@@ -31,12 +36,15 @@ const SendMessage = ({ scroll }) => {
         id="messageInput"
         name="messageInput"
         type="text"
-        className="form-input__input"
         placeholder="type message..."
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={e => setMessage(e.target.value)}
+        maxLength={500}
+        disabled={!roomId}
       />
-      <button type="submit">Send</button>
+      <button type="submit" disabled={!roomId}>
+        Send
+      </button>
     </form>
   );
 };

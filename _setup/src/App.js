@@ -2,10 +2,17 @@ import "./App.css";
 import NavBar from "./components/NavBar";
 import ChatBox from "./components/ChatBox";
 import Welcome from "./components/Welcome";
+import RoomsListPanel from "./components/RoomsListPanel";
+import RoomsActionsPanel from "./components/RoomsActionsPanel";
 import { useState } from "react";
 
 function App() {
-  const [user, setUser] = useState(false);
+  const [user] = useState(false);
+  const [activeRoom, setActiveRoom] = useState({
+    id: "general",
+    name: "General",
+    isPrivate: false,
+  });
 
   return (
     <div className="App">
@@ -13,9 +20,14 @@ function App() {
       {!user ? (
         <Welcome />
       ) : (
-        <>
-          <ChatBox />
-        </>
+        <div className="app-shell">
+          <RoomsListPanel
+            activeRoomId={activeRoom.id}
+            onSelectRoom={setActiveRoom}
+          />
+          <ChatBox activeRoom={activeRoom} />
+          <RoomsActionsPanel onSelectRoom={setActiveRoom} />
+        </div>
       )}
     </div>
   );
