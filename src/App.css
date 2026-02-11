@@ -93,6 +93,25 @@ button {
   letter-spacing: 0.03em;
 }
 
+.avatar {
+  border-radius: 999px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(248, 243, 236, 0.2);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .sign-in {
   border: none;
   background-color: transparent;

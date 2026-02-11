@@ -25,34 +25,34 @@ const Welcome = () => {
           <img src={GoogleSignin} alt="sign in with google" />
         </button>
         <p className="welcome-disclaimer">
-          <strong>New guide available:</strong> the refreshed walkthrough lives
-          on my blog. The original{" "}
+          <strong>Updated guide:</strong> The{" "}
+          <a href={blogUrl} target="_blank" rel="noreferrer">
+            2026 walkthrough
+          </a>{" "}
+          is on my blog. Looking for the original 2023 FreeCodeCamp tutorial?{" "}
           <a
             href="https://www.freecodecamp.org/news/building-a-real-time-chat-app-with-reactjs-and-firebase/"
             target="_blank"
             rel="noreferrer">
-            FreeCodeCamp guide
+            Read it here
           </a>{" "}
-          still works, and the legacy code remains on the{" "}
+          and use the legacy code on the{" "}
           <a
             href="https://github.com/Timonwa/react-chat/tree/freecodecamp-original"
             target="_blank"
             rel="noreferrer">
             freecodecamp-original
           </a>{" "}
-          branch.{" "}
-          <a href={blogUrl} target="_blank" rel="noreferrer">
-            Read the updated guide
-          </a>
+          branch.
         </p>
         <p className="welcome-disclaimer welcome-disclaimer--muted">
           Signing in stores your Google email, name, avatar, and messages in
-          Firebase so the chat can work. By testing this demo, you agree to the{" "}
+          Firebase so the chat can work. Demo data is cleared on the 1st of each
+          month. See the{" "}
           <a href={termsUrl} target="_blank" rel="noreferrer">
             terms of use
-          </a>
-          . The data is used solely for demo purposes and will be deleted
-          periodically.
+          </a>{" "}
+          for details.
         </p>
       </div>
 
@@ -72,8 +72,7 @@ const Welcome = () => {
             </div>
           </div>
           <p className="room-code-note">
-            Copy any code above and paste it to join the room. These rooms are
-            public, so feel free to test and chat!
+            Copy a code above and paste it to join the private room.
           </p>
         </div>
       </div>
