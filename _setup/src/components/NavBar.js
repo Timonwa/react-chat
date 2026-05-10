@@ -1,5 +1,5 @@
 import React from "react";
-import GoogleSignin from "../img/btn_google_signin_dark_pressed_web.png";
+import GoogleSignin from "../img/google-button.png";
 
 const NavBar = () => {
   const googleSignIn = () => {};
