@@ -58,7 +58,7 @@ function App() {
       )}
       <footer className="app-footer">
         Built by{" "}
-        <a href="https://tech.timonwa.com" target="_blank" rel="noreferrer">
+        <a href="https://links.timonwa.com" target="_blank" rel="noreferrer">
           Timonwa
         </a>
       </footer>

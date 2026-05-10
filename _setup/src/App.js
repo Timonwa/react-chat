@@ -29,6 +29,12 @@ function App() {
           <RoomsActionsPanel onSelectRoom={setActiveRoom} />
         </div>
       )}
+      <footer className="app-footer">
+        Built by{" "}
+        <a href="https://links.timonwa.com" target="_blank" rel="noreferrer">
+          Timonwa
+        </a>
+      </footer>
     </div>
   );
 }
