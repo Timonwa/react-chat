@@ -24,7 +24,7 @@ const Welcome = () => {
           <a href={blogUrl} target="_blank" rel="noreferrer">
             2026 walkthrough
           </a>{" "}
-          is on my blog. Looking for the original 2023 FreeCodeCamp tutorial?
+          is on my blog. Looking for the original 2023 FreeCodeCamp tutorial?{" "}
           <a
             href="https://www.freecodecamp.org/news/building-a-real-time-chat-app-with-reactjs-and-firebase/"
             target="_blank"
