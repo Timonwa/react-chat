@@ -1,5 +1,7 @@
 import React from "react";
 import GoogleSignin from "../img/google-button.png";
+import { auth } from "../firebase";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const Welcome = () => {
   const blogUrl = "https://tech.timonwa.com/blog";
