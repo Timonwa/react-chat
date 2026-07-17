@@ -13,7 +13,7 @@ import {
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 
-const RoomsActionsPanel = ({ onSelectRoom }) => {
+const RoomsActionsPanel = ({ onSelectRoom, isOpen, onClose }) => {
   const [user] = useAuthState(auth);
   const [roomName, setRoomName] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
@@ -113,9 +113,18 @@ const RoomsActionsPanel = ({ onSelectRoom }) => {
   };
 
   return (
-    <aside className="rooms-actions-panel">
+    <aside className={`rooms-actions-panel ${isOpen ? "panel--open" : ""}`}>
       <div className="rooms-actions-panel__header">
-        <h2>Create & Join</h2>
+        <div className="panel-title-row">
+          <h2>Create & Join</h2>
+          <button
+            type="button"
+            className="panel-close"
+            onClick={onClose}
+            aria-label="Close create and join panel">
+            ✕
+          </button>
+        </div>
         <p>Start a new room or join an existing one.</p>
       </div>
 

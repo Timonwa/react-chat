@@ -13,7 +13,7 @@ import {
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 
-const RoomsListPanel = ({ activeRoomId, onSelectRoom }) => {
+const RoomsListPanel = ({ activeRoomId, onSelectRoom, isOpen, onClose }) => {
   const [user] = useAuthState(auth);
   const [rooms, setRooms] = useState([]);
   const [memberships, setMemberships] = useState([]);
@@ -110,9 +110,18 @@ const RoomsListPanel = ({ activeRoomId, onSelectRoom }) => {
   };
 
   return (
-    <aside className="rooms-list-panel">
+    <aside className={`rooms-list-panel ${isOpen ? "panel--open" : ""}`}>
       <div className="rooms-list-panel__header">
-        <h2>Rooms</h2>
+        <div className="panel-title-row">
+          <h2>Rooms</h2>
+          <button
+            type="button"
+            className="panel-close"
+            onClick={onClose}
+            aria-label="Close rooms panel">
+            ✕
+          </button>
+        </div>
         <div className="rooms-tabs">
           <button
             className={`rooms-tab ${activeTab === "all" ? "rooms-tab--active" : ""}`}
