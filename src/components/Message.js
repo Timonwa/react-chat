@@ -1,21 +1,18 @@
 import React from "react";
-import { auth } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import Avatar from "./Avatar";
 
 const Message = ({ message }) => {
-  const [user] = useAuthState(auth);
-  const messageTime = message?.createdAt?.toDate
+  const messageTime = message?.createdAt
     ? new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
         minute: "2-digit",
         month: "short",
         day: "numeric",
-      }).format(message.createdAt.toDate())
+      }).format(new Date(message.createdAt))
     : "";
 
   return (
-    <div className={`chat-bubble ${message.uid === user?.uid ? "right" : ""}`}>
+    <div className={`chat-bubble ${message.isOwn ? "right" : ""}`}>
       <Avatar
         photoURL={message.avatar}
         name={message.name}
@@ -26,9 +23,7 @@ const Message = ({ message }) => {
         <p className="user-name">{message.name}</p>
         <p className="user-message">{message.text}</p>
         {messageTime ? (
-          <time
-            className="message-time"
-            dateTime={message.createdAt.toDate().toISOString()}>
+          <time className="message-time" dateTime={new Date().toISOString()}>
             {messageTime}
           </time>
         ) : null}

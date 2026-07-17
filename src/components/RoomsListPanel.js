@@ -1,64 +1,37 @@
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  orderBy,
-  query,
-  serverTimestamp,
-  setDoc,
-  where,
-} from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../firebase";
+import React, { useMemo, useState } from "react";
 
 const RoomsListPanel = ({ activeRoomId, onSelectRoom }) => {
-  const [user] = useAuthState(auth);
-  const [rooms, setRooms] = useState([]);
-  const [memberships, setMemberships] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [memberRoomIds, setMemberRoomIds] = useState(["general"]);
 
-  useEffect(() => {
-    const roomsQuery = query(collection(db, "rooms"), orderBy("createdAt"));
-    const unsubscribe = onSnapshot(roomsQuery, snapshot => {
-      const nextRooms = snapshot.docs.map(room => ({
-        id: room.id,
-        ...room.data(),
-      }));
-      setRooms(nextRooms);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (!user) {
-      setMemberships([]);
-      return undefined;
-    }
-
-    const membershipQuery = query(
-      collection(db, "memberships"),
-      where("uid", "==", user.uid),
-    );
-
-    const unsubscribe = onSnapshot(membershipQuery, snapshot => {
-      const nextMemberships = snapshot.docs.map(membership => ({
-        id: membership.id,
-        ...membership.data(),
-      }));
-      setMemberships(nextMemberships);
-    });
-
-    return () => unsubscribe();
-  }, [user]);
-
-  const membershipSet = useMemo(
-    () => new Set(memberships.map(membership => membership.roomId)),
-    [memberships],
+  const rooms = useMemo(
+    () => [
+      { id: "general", name: "General", isPrivate: false },
+      {
+        id: "react-tips",
+        name: "React Tips",
+        isPrivate: true,
+        joinCode: "0695-RJ9I",
+      },
+      {
+        id: "firebase-chat",
+        name: "Firebase Chat",
+        isPrivate: true,
+        joinCode: "P8IB-A98Z",
+      },
+      {
+        id: "modern-ui",
+        name: "Modern UI",
+        isPrivate: true,
+        joinCode: "64KN-6OXP",
+      },
+      { id: "frontend", name: "Frontend Lab", isPrivate: false },
+    ],
+    [],
   );
+
+  const membershipSet = useMemo(() => new Set(memberRoomIds), [memberRoomIds]);
 
   const filteredRooms = useMemo(() => {
     let filtered = rooms.filter(
@@ -83,27 +56,16 @@ const RoomsListPanel = ({ activeRoomId, onSelectRoom }) => {
     return filtered;
   }, [rooms, membershipSet, activeTab, searchTerm]);
 
-  const joinRoom = async (roomId, event) => {
+  const joinRoom = (roomId, event) => {
     event.stopPropagation();
-    if (!user) {
-      return;
-    }
-
-    await setDoc(doc(db, "memberships", `${roomId}_${user.uid}`), {
-      roomId,
-      uid: user.uid,
-      joinedAt: serverTimestamp(),
-    });
+    setMemberRoomIds(prev =>
+      prev.includes(roomId) ? prev : [...prev, roomId],
+    );
   };
 
-  const leaveRoom = async (roomId, event) => {
+  const leaveRoom = (roomId, event) => {
     event.stopPropagation();
-    if (!user) {
-      return;
-    }
-
-    await deleteDoc(doc(db, "memberships", `${roomId}_${user.uid}`));
-
+    setMemberRoomIds(prev => prev.filter(id => id !== roomId));
     if (activeRoomId === roomId) {
       onSelectRoom({ id: "general", name: "General", isPrivate: false });
     }

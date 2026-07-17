@@ -5,10 +5,7 @@ const Welcome = () => {
   const blogUrl = "https://tech.timonwa.com/blog";
   const termsUrl = "https://tech.timonwa.com/terms";
 
-  const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
-  };
+  const googleSignIn = () => {};
 
   return (
     <main className="welcome">

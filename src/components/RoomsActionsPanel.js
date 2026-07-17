@@ -1,20 +1,6 @@
 import React, { useState } from "react";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDocs,
-  limit,
-  query,
-  serverTimestamp,
-  setDoc,
-  where,
-} from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../firebase";
 
-const RoomsActionsPanel = ({ onSelectRoom }) => {
-  const [user] = useAuthState(auth);
+const RoomsActionsPanel = () => {
   const [roomName, setRoomName] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [createdRoomCode, setCreatedRoomCode] = useState(null);
@@ -27,89 +13,31 @@ const RoomsActionsPanel = ({ onSelectRoom }) => {
     return `${prefix}-${suffix}`;
   };
 
-  const handleCreateRoom = async event => {
+  const handleCreateRoom = event => {
     event.preventDefault();
     const trimmed = roomName.trim();
     if (!trimmed) {
       return;
     }
 
-    const joinCodeValue = isPrivate ? createJoinCode() : null;
-    const joinCodeLower = joinCodeValue ? joinCodeValue.toLowerCase() : null;
-
-    const newRoom = await addDoc(collection(db, "rooms"), {
-      name: trimmed,
-      isPrivate,
-      joinCode: joinCodeValue,
-      joinCodeLower,
-      createdAt: serverTimestamp(),
-      createdBy: user?.uid ?? "anonymous",
-    });
-
-    if (isPrivate && user) {
-      await setDoc(doc(db, "memberships", `${newRoom.id}_${user.uid}`), {
-        roomId: newRoom.id,
-        uid: user.uid,
-        joinedAt: serverTimestamp(),
-      });
-      setCreatedRoomCode({
-        roomId: newRoom.id,
-        name: trimmed,
-        code: joinCodeValue,
-      });
+    if (isPrivate) {
+      setCreatedRoomCode({ name: trimmed, code: createJoinCode() });
+    } else {
+      setCreatedRoomCode(null);
     }
 
     setRoomName("");
     setIsPrivate(false);
   };
 
-  const handleJoinByCode = async event => {
+  const handleJoinByCode = event => {
     event.preventDefault();
-    if (!user) {
+    if (!joinCode.trim()) {
       return;
     }
 
-    const normalized = joinCode.trim().toLowerCase();
-    if (!normalized) {
-      return;
-    }
-
-    setJoinStatus(null);
-    const roomQuery = query(
-      collection(db, "rooms"),
-      where("joinCodeLower", "==", normalized),
-      limit(1),
-    );
-    const snapshot = await getDocs(roomQuery);
-
-    if (snapshot.empty) {
-      setJoinStatus({ type: "error", message: "No private room found." });
-      return;
-    }
-
-    const roomDoc = snapshot.docs[0];
-    const roomData = roomDoc.data();
-    if (!roomData?.isPrivate) {
-      setJoinStatus({
-        type: "error",
-        message: "Code is not for a private room.",
-      });
-      return;
-    }
-
-    await setDoc(doc(db, "memberships", `${roomDoc.id}_${user.uid}`), {
-      roomId: roomDoc.id,
-      uid: user.uid,
-      joinedAt: serverTimestamp(),
-    });
-
-    setJoinStatus({ type: "success", message: "Joined private room." });
+    setJoinStatus({ type: "success", message: "Room joined (demo)." });
     setJoinCode("");
-    onSelectRoom({
-      id: roomDoc.id,
-      name: roomData.name || "Private room",
-      isPrivate: true,
-    });
   };
 
   return (

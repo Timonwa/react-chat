@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { auth, db } from "../firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
-const SendMessage = ({ scroll, roomId }) => {
+const SendMessage = ({ scroll, roomId, onSend }) => {
   const [message, setMessage] = useState("");
 
-  const sendMessage = async event => {
+  const sendMessage = event => {
     event.preventDefault();
     const trimmed = message.trim();
     if (!trimmed) {
@@ -16,19 +14,13 @@ const SendMessage = ({ scroll, roomId }) => {
       alert("Select a room to send messages");
       return;
     }
-    const { uid, displayName, photoURL } = auth.currentUser;
-    await addDoc(collection(db, "rooms", roomId, "messages"), {
-      text: trimmed,
-      name: displayName,
-      avatar: photoURL,
-      createdAt: serverTimestamp(),
-      uid,
-    });
+    onSend?.(trimmed);
     setMessage("");
-    scroll.current.scrollIntoView({ behavior: "smooth" });
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
   };
+
   return (
-    <form onSubmit={event => sendMessage(event)} className="send-message">
+    <form onSubmit={sendMessage} className="send-message">
       <label htmlFor="messageInput" hidden>
         Enter Message
       </label>

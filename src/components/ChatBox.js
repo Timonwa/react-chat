@@ -1,14 +1,34 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  query,
-  collection,
-  orderBy,
-  onSnapshot,
-  limit,
-} from "firebase/firestore";
-import { db } from "../firebase";
 import Message from "./Message";
 import SendMessage from "./SendMessage";
+
+const sampleMessages = {
+  general: [
+    {
+      id: "m1",
+      name: "Timonwa",
+      text: "Welcome to React Chat!",
+      createdAt: new Date(),
+      isOwn: false,
+    },
+    {
+      id: "m2",
+      name: "You",
+      text: "Excited to build this with Firebase.",
+      createdAt: new Date(),
+      isOwn: true,
+    },
+  ],
+  "react-tips": [
+    {
+      id: "m3",
+      name: "Timonwa",
+      text: "Share your best hooks patterns.",
+      createdAt: new Date(),
+      isOwn: false,
+    },
+  ],
+};
 
 const ChatBox = ({ activeRoom }) => {
   const [messages, setMessages] = useState([]);
@@ -24,29 +44,26 @@ const ChatBox = ({ activeRoom }) => {
   useEffect(() => {
     if (!activeRoom?.id) {
       setMessages([]);
-      return undefined;
+      return;
     }
 
-    const q = query(
-      collection(db, "rooms", activeRoom.id, "messages"),
-      orderBy("createdAt"),
-      limit(100),
-    );
-
-    const unsubscribe = onSnapshot(q, snapshot => {
-      const fetchedMessages = snapshot.docs.map(docSnapshot => ({
-        ...docSnapshot.data(),
-        id: docSnapshot.id,
-      }));
-      setMessages(fetchedMessages);
-    });
-
-    return () => unsubscribe();
-  }, [activeRoom?.id]);
+    setMessages(sampleMessages[activeRoom.id] || []);
+  }, [activeRoom]);
 
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleSend = text => {
+    const newMessage = {
+      id: `m-${Date.now()}`,
+      name: "You",
+      text,
+      createdAt: new Date(),
+      isOwn: true,
+    };
+    setMessages(prev => [...prev, newMessage]);
+  };
 
   return (
     <main className="chat-box">
@@ -68,7 +85,11 @@ const ChatBox = ({ activeRoom }) => {
         )}
         <span ref={scroll}></span>
       </div>
-      <SendMessage scroll={scroll} roomId={activeRoom?.id} />
+      <SendMessage
+        scroll={scroll}
+        roomId={activeRoom?.id}
+        onSend={handleSend}
+      />
     </main>
   );
 };
