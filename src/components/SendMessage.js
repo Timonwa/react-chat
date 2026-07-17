@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SendMessage = ({ scroll, roomId, onSend }) => {
+const SendMessage = ({ roomId, onSend }) => {
   const [message, setMessage] = useState("");
 
   const sendMessage = event => {
@@ -16,7 +16,6 @@ const SendMessage = ({ scroll, roomId, onSend }) => {
     }
     onSend?.(trimmed);
     setMessage("");
-    scroll.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (

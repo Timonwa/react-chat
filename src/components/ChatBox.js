@@ -32,7 +32,7 @@ const sampleMessages = {
 
 const ChatBox = ({ activeRoom }) => {
   const [messages, setMessages] = useState([]);
-  const scroll = useRef(null);
+  const messagesRef = useRef(null);
 
   const roomLabel = useMemo(() => {
     if (!activeRoom?.name) {
@@ -51,7 +51,11 @@ const ChatBox = ({ activeRoom }) => {
   }, [activeRoom]);
 
   useEffect(() => {
-    scroll.current?.scrollIntoView({ behavior: "smooth" });
+    // Scroll the message list itself to the bottom — not the whole window.
+    const el = messagesRef.current;
+    if (el) {
+      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+    }
   }, [messages]);
 
   const handleSend = text => {
@@ -73,7 +77,7 @@ const ChatBox = ({ activeRoom }) => {
           <p>Share updates and keep the conversation moving.</p>
         </div>
       </header>
-      <div className="messages-wrapper">
+      <div className="messages-wrapper" ref={messagesRef}>
         {messages.length ? (
           messages.map(message => (
             <Message key={message.id} message={message} />
@@ -83,10 +87,8 @@ const ChatBox = ({ activeRoom }) => {
             <p>No messages yet. Start the conversation.</p>
           </div>
         )}
-        <span ref={scroll}></span>
       </div>
       <SendMessage
-        scroll={scroll}
         roomId={activeRoom?.id}
         onSend={handleSend}
       />

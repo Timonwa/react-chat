@@ -13,6 +13,13 @@ function App() {
     name: "General",
     isPrivate: false,
   });
+  // Which side panel is open as a drawer on small screens: "rooms" | "actions" | null.
+  const [openPanel, setOpenPanel] = useState(null);
+
+  const handleSelectRoom = room => {
+    setActiveRoom(room);
+    setOpenPanel(null); // close the drawer after picking a room on mobile
+  };
 
   return (
     <div className="App">
@@ -21,12 +28,41 @@ function App() {
         <Welcome />
       ) : (
         <div className="app-shell">
+          <div className="panel-toggles">
+            <button
+              type="button"
+              className="panel-toggle"
+              onClick={() => setOpenPanel("rooms")}>
+              ☰ Rooms
+            </button>
+            <button
+              type="button"
+              className="panel-toggle"
+              onClick={() => setOpenPanel("actions")}>
+              + Create &amp; Join
+            </button>
+          </div>
+
           <RoomsListPanel
             activeRoomId={activeRoom.id}
-            onSelectRoom={setActiveRoom}
+            onSelectRoom={handleSelectRoom}
+            isOpen={openPanel === "rooms"}
+            onClose={() => setOpenPanel(null)}
           />
           <ChatBox activeRoom={activeRoom} />
-          <RoomsActionsPanel onSelectRoom={setActiveRoom} />
+          <RoomsActionsPanel
+            onSelectRoom={handleSelectRoom}
+            isOpen={openPanel === "actions"}
+            onClose={() => setOpenPanel(null)}
+          />
+
+          {openPanel && (
+            <div
+              className="panel-overlay"
+              onClick={() => setOpenPanel(null)}
+              aria-hidden="true"
+            />
+          )}
         </div>
       )}
       <footer className="app-footer">
