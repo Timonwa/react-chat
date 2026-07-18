@@ -1,0 +1,26 @@
+name: Monthly Firebase cleanup
+
+on:
+    schedule:
+        - cron: "0 3 1 * *" 
+    workflow_dispatch:
+
+jobs:
+    cleanup:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run cleanup
+              env:
+                  FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+                  PRESERVE_ROOM_IDS: "general,9PZo5Kj61VqX4pabCia0,TZnphwNN6J6PTRSD6gRu,WmtKxO1VXHhPrRqnj54b,ebwyFtktSwpg28Q9kga5"
+              run: npm run cleanup:monthly

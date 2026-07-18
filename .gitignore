@@ -11,6 +11,13 @@
 # production
 /build
 
+# secrets — Firebase service account keys (never commit these)
+serviceAccount.json
+service-account.json
+*serviceAccount*.json
+*service-account*.json
+firebase-adminsdk-*.json
+
 # misc
 .DS_Store
 .env
