@@ -1,0 +1,48 @@
+// Firestore security rules for this app.
+//
+// NOTE: This file is committed for reference/viewing only — it is not covered
+// by the tutorial. The live rules are managed and deployed in the Firebase
+// console. Keep this file in sync with the console if you change them there.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // helper: is this request from a signed-in user?
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // helper: is this user a member of the given room?
+    function isMember(roomId) {
+      return exists(
+        /databases/$(database)/documents/memberships/$(roomId + "_" + request.auth.uid)
+      );
+    }
+
+    // rooms: any signed-in user can read and create rooms, but no one can
+    // update or delete them in this demo.
+    match /rooms/{roomId} {
+      allow read: if signedIn();
+      allow create: if signedIn();
+      allow update, delete: if false;
+    }
+
+    // messages: anyone signed in can read/write to public rooms;
+    // for private rooms, only members of that room can read/write.
+    match /rooms/{roomId}/messages/{messageId} {
+      allow read, create: if signedIn() && (
+        get(/databases/$(database)/documents/rooms/$(roomId)).data.isPrivate == false
+        || isMember(roomId)
+      );
+      allow update, delete: if false;
+    }
+
+    // memberships: users can only create or delete their own memberships.
+    match /memberships/{membershipId} {
+      allow read: if signedIn() && request.auth.uid == resource.data.uid;
+      allow create: if signedIn() && request.auth.uid == request.resource.data.uid;
+      allow delete: if signedIn() && request.auth.uid == resource.data.uid;
+      allow update: if false;
+    }
+  }
+}
