@@ -1,25 +1,26 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  orderBy,
   query,
-  serverTimestamp,
-  setDoc,
+  orderBy,
   where,
+  onSnapshot,
+  doc,
+  setDoc,
+  deleteDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 
 const RoomsListPanel = ({ activeRoomId, onSelectRoom, isOpen, onClose }) => {
-  const [user] = useAuthState(auth);
-  const [rooms, setRooms] = useState([]);
-  const [memberships, setMemberships] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [memberships, setMemberships] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [user] = useAuthState(auth);
 
+  // Get the list of room IDs that the user is a member of
   useEffect(() => {
     const roomsQuery = query(collection(db, "rooms"), orderBy("createdAt"));
     const unsubscribe = onSnapshot(roomsQuery, snapshot => {
@@ -33,6 +34,7 @@ const RoomsListPanel = ({ activeRoomId, onSelectRoom, isOpen, onClose }) => {
     return () => unsubscribe();
   }, []);
 
+  // Get the list of room IDs that the user is a member of
   useEffect(() => {
     if (!user) {
       setMemberships([]);

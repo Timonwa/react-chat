@@ -1,7 +1,7 @@
 import React from "react";
+import Avatar from "./Avatar";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Avatar from "./Avatar";
 
 // Show only the first name in the chat for privacy in this demo app.
 const getFirstName = fullName => {

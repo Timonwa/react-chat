@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { auth, db } from "./firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import ChatBox from "./components/ChatBox";
 import Welcome from "./components/Welcome";
 import RoomsListPanel from "./components/RoomsListPanel";
 import RoomsActionsPanel from "./components/RoomsActionsPanel";
+import { useEffect, useState } from "react";
+import { auth, db } from "./firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 function App() {
   const [user] = useAuthState(auth);
@@ -16,6 +16,32 @@ function App() {
     name: "General",
     isPrivate: false,
   });
+
+  // Ensure that the "general" room exists in Firestore when the app loads. If it doesn't exist, create it. If it does exist, fetch its data and set it as the active room.
+  useEffect(() => {
+    const ensureGeneralRoom = async () => {
+      const generalRef = doc(db, "rooms", "general");
+      const generalSnap = await getDoc(generalRef);
+      if (!generalSnap.exists()) {
+        await setDoc(generalRef, {
+          name: "General",
+          isPrivate: false,
+          createdAt: serverTimestamp(),
+          createdBy: "system",
+        });
+      } else {
+        const data = generalSnap.data();
+        setActiveRoom(prev => ({
+          ...prev,
+          name: data.name || "General",
+          isPrivate: Boolean(data.isPrivate),
+        }));
+      }
+    };
+
+    ensureGeneralRoom();
+  }, []);
+
   // Which side panel is open as a drawer on small screens: "rooms" | "actions" | null.
   const [openPanel, setOpenPanel] = useState(null);
 

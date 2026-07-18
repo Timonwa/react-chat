@@ -29,15 +29,17 @@ const ChatBox = ({ activeRoom }) => {
 
     const q = query(
       collection(db, "rooms", activeRoom.id, "messages"),
-      orderBy("createdAt"),
-      limit(100),
+      orderBy("createdAt", "desc"),
+      limit(50),
     );
 
     const unsubscribe = onSnapshot(q, snapshot => {
-      const fetchedMessages = snapshot.docs.map(docSnapshot => ({
-        ...docSnapshot.data(),
-        id: docSnapshot.id,
-      }));
+      const fetchedMessages = snapshot.docs
+        .map(docSnapshot => ({
+          ...docSnapshot.data(),
+          id: docSnapshot.id,
+        }))
+        .reverse();
       setMessages(fetchedMessages);
     });
 
