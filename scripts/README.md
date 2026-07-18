@@ -16,8 +16,8 @@ They run with the **Firebase Admin SDK** on a server or a scheduled job, separat
 Run via `npm run cleanup:monthly` from the project root. Each run:
 
 - **Deletes every room and all of its messages**, _except_ the rooms you preserve.
-- **Always keeps the `general` room**, but trims it to the **10 most recent messages**.
-- Keeps any extra rooms listed in `PRESERVE_ROOM_IDS` (also trimmed to their latest 10 messages).
+- **Always keeps the `general` room**, but trims it to the **50 most recent messages**.
+- Keeps any extra rooms listed in `PRESERVE_ROOM_IDS` (also trimmed to their latest 50 messages).
 - Deletes documents in batches of `PAGE_SIZE` (default 400) to stay within Firestore limits.
 
 It prints a summary when it finishes, e.g. `Cleanup complete. Deleted rooms: 3. Deleted messages: 128.`

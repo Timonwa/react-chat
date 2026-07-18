@@ -40,7 +40,7 @@ const trimRoomMessages = async roomId => {
   const messagesRef = db.collection("rooms").doc(roomId).collection("messages");
   const keepSnapshot = await messagesRef
     .orderBy("createdAt", "desc")
-    .limit(10)
+    .limit(50)
     .get();
 
   if (keepSnapshot.empty) {
