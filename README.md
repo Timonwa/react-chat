@@ -1,107 +1,103 @@
 # Create a Multi-Room Chat App Using React and Firebase
 
-This repository contains the updated demo project for building a real-time chat app with React and Firebase. You will learn how to set up Firebase Authentication, design a room-based Firestore data model, and build a modern chat UI with public and private rooms.
+Starter code for the tutorial on building a real-time chat app with React and Firebase. The UI is already built — you'll follow the guide to wire up Firebase Authentication, a room-based Firestore data model, and real-time messaging yourself.
 
-> **📌 You're on the `setup` branch**
+![The finished React Chat app: a Rooms panel with public/private tabs on the left, the General room with live messages and avatars in the middle, and a Create & Join panel on the right](public/01-final-app-look.png)
+
+> **📌 You're on the `setup` branch — the starter code**
 >
-> This branch holds the **starter code** you follow along with in the tutorial — a static chat UI with placeholder sample data and **no Firebase wired up yet**. Work through the guide step by step to add Google authentication, the Firestore data model, and real-time messaging yourself:
+> This is the code you follow along with in the tutorial. The layout, components, and styles are in place, but **Firebase isn't wired up yet** — the app runs on local sample data and a fake signed-in state. Build the real thing step by step by following the guide:
 >
 > **👉 [Create a Multi-Room Chat App Using React and Firebase](https://tech.timonwa.com/blog/create-multi-room-chat-app-using-react-firebase)**
 >
-> Prefer to see the finished result first? The completed code lives on the [`main` branch](https://github.com/Timonwa/react-chat).
-
-To access the original FreeCodeCamp tutorial, check out the [freecodecamp-original branch](https://github.com/Timonwa/react-chat/tree/freecodecamp-original).
-
-Please give this repo a ⭐ if it was helpful to you.
+> Prefer the finished result? The completed code lives on the [`main` branch](https://github.com/Timonwa/react-chat), and there's a [live demo](https://react-chat-timonwa.vercel.app/).
+>
+> ⭐ If this helped, please star the repo.
 
 ## Table of Contents
 
 - [What You'll Build](#what-youll-build)
-- [Technologies Used](#technologies-used)
+- [Tech Stack](#tech-stack)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-- [Scripts \& Data Cleanup](#scripts--data-cleanup)
+- [Author](#author)
 - [License](#license)
 - [Additional Resources](#additional-resources)
 
 ## What You'll Build
 
-By following the tutorial from this starter code, you'll add:
+Starting from this UI, the tutorial walks you through adding:
 
-- **Google authentication** with Firebase Auth
+- **Google authentication** with Firebase Auth (replacing the fake signed-in state)
+- **Real-time messaging** backed by Cloud Firestore (replacing the local sample data)
+- **A room-based Firestore schema** for public and private rooms
 - **Public and private rooms** with shareable join codes
-- **Room search and tabs** for public vs private rooms
-- **Message timestamps** and avatars with fallbacks
-- **Room-based Firestore schema** for cleaner data access
-- **Monthly cleanup automation** to keep demo data fresh
+- **Room search and tabs** for filtering public vs private rooms
+- **Message timestamps and avatars** with fallbacks
 
-## Technologies Used
+Already in place for you: the responsive three-panel layout (rooms, chat, create & join), all components and styling, and the drawer behavior on small screens.
 
-- **[React](https://react.dev/)** – UI library
-- **[Firebase](https://firebase.google.com/)** – Auth + Firestore
-- **[React Firebase Hooks](https://github.com/CSFrequency/react-firebase-hooks)** – Auth state helpers
+## Tech Stack
+
+- **[React](https://react.dev/)** – UI library (Create React App)
+- **[Firebase](https://firebase.google.com/)** – Authentication + Cloud Firestore
+- **[React Firebase Hooks](https://github.com/CSFrequency/react-firebase-hooks)** – auth state helpers
 - **JavaScript** – ES2020+ syntax
 
 ## Prerequisites
 
 - Node.js 18+ (or newer)
-- A Firebase project with Authentication and Firestore enabled
+- A [Firebase project](https://console.firebase.google.com/) with **Authentication** (Google provider) and **Cloud Firestore** enabled
 
 ## Getting Started
 
-1. Clone the repository:
+1. Clone the repository and switch to this branch:
 
-  ```bash
-  git clone https://github.com/Timonwa/react-chat.git
-  cd react-chat
-  ```
+   ```bash
+   git clone https://github.com/Timonwa/react-chat.git
+   cd react-chat
+   git checkout setup
+   ```
 
-1. Install dependencies:
+2. Install dependencies:
 
-  ```bash
-  npm install
-  ```
+   ```bash
+   npm install
+   ```
 
-1. Create your environment file:
+3. Create your environment file:
 
-  ```bash
-  cp .env.example .env
-  ```
+   ```bash
+   cp .env.example .env
+   ```
 
-  Add your Firebase config values in `.env`.
+   You'll add your Firebase web app config as you follow the tutorial. Find these values in the Firebase console under **Project settings → General → Your apps**.
 
-1. Start the development server:
+   | Variable | Required | Description |
+   | --- | --- | --- |
+   | `REACT_APP_API_KEY` | Yes | Firebase web API key |
+   | `REACT_APP_AUTH_DOMAIN` | Yes | Firebase auth domain (`your_project_id.firebaseapp.com`) |
+   | `REACT_APP_PROJECT_ID` | Yes | Firebase project ID |
+   | `REACT_APP_STORAGE_BUCKET` | Yes | Firebase storage bucket |
+   | `REACT_APP_MESSAGING_SENDER_ID` | Yes | Firebase Cloud Messaging sender ID |
+   | `REACT_APP_APP_ID` | Yes | Firebase app ID |
+   | `REACT_APP_MEASUREMENT_ID` | No | Google Analytics measurement ID (optional) |
 
-  ```bash
-  npm start
-  ```
+4. Start the development server:
 
-## Scripts & Data Cleanup
+   ```bash
+   npm start
+   ```
 
-> **⚠️ This project ships with a script that deletes data.** It isn't part of the tutorial, but if you clone and host your own copy, this is why demo rooms and older messages may disappear over time.
+   The app runs at [http://localhost:3000](http://localhost:3000) on sample data. Follow the tutorial to make it real.
 
-The [`scripts/`](scripts/) folder holds a maintenance script that runs with the **Firebase Admin SDK** on a server (or a scheduled job) — it is separate from the browser app and needs admin credentials to run.
+## Author
 
-- [`scripts/firebaseAdmin.mjs`](scripts/firebaseAdmin.mjs) – initializes the Admin SDK. It reads a service account from the `FIREBASE_SERVICE_ACCOUNT` environment variable (falling back to Google's default application credentials).
-- [`scripts/cleanup-monthly.mjs`](scripts/cleanup-monthly.mjs) – the actual cleanup routine, run via `npm run cleanup:monthly`.
+Built by **Timonwa Akintokun**.
 
-### `npm run cleanup:monthly`
-
-This is what keeps the public demo from growing forever (and running up Firestore costs). Each run:
-
-- **Deletes every room and its messages**, _except_ the rooms you preserve.
-- **Always keeps the `general` room**, but trims it to the **10 most recent messages**.
-- Keeps any extra rooms listed in `PRESERVE_ROOM_IDS` (also trimmed to their latest 10 messages).
-
-On the hosted demo it runs on a monthly schedule (e.g. a cron job or GitHub Action), so a fresh clone that reuses that setup will see rooms and old messages cleared periodically. **If you don't want this, simply don't run or schedule the script** — nothing in the app itself deletes data.
-
-It's configured entirely through environment variables:
-
-| Variable | Required | Default | Description |
-| --- | --- | --- | --- |
-| `FIREBASE_SERVICE_ACCOUNT` | Yes | – | Firebase service account JSON (as a string) used to authenticate the Admin SDK. |
-| `PRESERVE_ROOM_IDS` | No | – | Comma-separated room IDs to keep in addition to `general`. |
-| `PAGE_SIZE` | No | `400` | Number of documents deleted per batch. |
+- 📝 More tutorials on my blog: **[tech.timonwa.com/blog](https://tech.timonwa.com/blog)**
+- 🔗 All my links & socials: **[links.timonwa.com](https://links.timonwa.com)**
+- 💻 GitHub: **[@Timonwa](https://github.com/Timonwa)**
 
 ## License
 
@@ -109,7 +105,8 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE.MD)
 
 ## Additional Resources
 
-- 📝 [Updated 2026 Guide](https://tech.timonwa.com/blog/create-multi-room-chat-app-using-react-firebase)
-- 📜 [Original FreeCodeCamp Tutorial (2023)](https://www.freecodecamp.org/news/building-a-real-time-chat-app-with-reactjs-and-firebase/)
-- 🧩 [Legacy Code Branch](https://github.com/Timonwa/react-chat/tree/freecodecamp-original)
-- 📚 [Firebase Documentation](https://firebase.google.com/docs)
+- 📝 [Create a Multi-Room Chat App Using React and Firebase](https://tech.timonwa.com/blog/create-multi-room-chat-app-using-react-firebase) — the full tutorial
+- 📜 [Original Tutorial (2023)](https://tech.timonwa.com/blog/building-a-real-time-chat-app-with-reactjs-and-firebase) – originally published on [freeCodeCamp](https://www.freecodecamp.org/news/building-a-real-time-chat-app-with-reactjs-and-firebase/)
+- 📚 [More tutorials on my blog](https://tech.timonwa.com/blog)
+- 🔗 [Connect with me](https://links.timonwa.com)
+- 📖 [Firebase Documentation](https://firebase.google.com/docs)
