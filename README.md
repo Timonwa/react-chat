@@ -6,7 +6,7 @@ Starter code for the tutorial on building a real-time chat app with React and Fi
 
 > **📌 You're on the `setup` branch — the starter code**
 >
-> This is the code you follow along with in the tutorial. The layout, components, and styles are in place, but **Firebase isn't wired up yet** — the app runs on local sample data and a fake signed-in state. Build the real thing step by step by following the guide:
+> This is the code you follow along with in the tutorial. The layout, components, and styles are in place, but **Firebase isn't wired up yet** — the app opens on the sign-in screen, and clicking **Sign in with Google** drops you straight into the chat UI (no real auth), which runs on hard-coded sample data. Build the real thing step by step by following the guide:
 >
 > **👉 [Create a Multi-Room Chat App Using React and Firebase](https://tech.timonwa.com/blog/create-multi-room-chat-app-using-react-firebase)**
 >
@@ -28,14 +28,13 @@ Starter code for the tutorial on building a real-time chat app with React and Fi
 
 Starting from this UI, the tutorial walks you through adding:
 
-- **Google authentication** with Firebase Auth (replacing the fake signed-in state)
-- **Real-time messaging** backed by Cloud Firestore (replacing the local sample data)
+- **Google authentication** with Firebase Auth (replacing the placeholder sign-in)
+- **Real-time messaging** backed by Cloud Firestore (replacing the hard-coded sample data)
 - **A room-based Firestore schema** for public and private rooms
 - **Public and private rooms** with shareable join codes
 - **Room search and tabs** for filtering public vs private rooms
-- **Message timestamps and avatars** with fallbacks
 
-Already in place for you: the responsive three-panel layout (rooms, chat, create & join), all components and styling, and the drawer behavior on small screens.
+Already in place for you: the responsive three-panel layout (rooms, chat, create & join), all components and styling — including message timestamps and avatars with fallbacks — and the drawer behavior on small screens.
 
 ## Tech Stack
 
@@ -89,7 +88,7 @@ Already in place for you: the responsive three-panel layout (rooms, chat, create
    npm start
    ```
 
-   The app runs at [http://localhost:3000](http://localhost:3000) on sample data. Follow the tutorial to make it real.
+   The app runs at [http://localhost:3000](http://localhost:3000) and opens on the sign-in screen. Click **Sign in with Google** to jump into the chat UI on sample data — it's placeholder auth, not the real thing, so follow the tutorial to wire up Firebase.
 
 ## Author
 

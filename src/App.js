@@ -7,7 +7,7 @@ import RoomsActionsPanel from "./components/RoomsActionsPanel";
 import { useState } from "react";
 
 function App() {
-  const [user] = useState(false);
+  const [user, setUser] = useState(false);
   const [activeRoom, setActiveRoom] = useState({
     id: "general",
     name: "General",
@@ -21,11 +21,17 @@ function App() {
     setOpenPanel(null); // close the drawer after picking a room on mobile
   };
 
+  const handleSignIn = () => setUser(true);
+  const handleSignOut = () => {
+    setUser(false);
+    setOpenPanel(null);
+  };
+
   return (
     <div className="App">
-      <NavBar />
+      <NavBar user={user} onSignIn={handleSignIn} onSignOut={handleSignOut} />
       {!user ? (
-        <Welcome />
+        <Welcome onSignIn={handleSignIn} />
       ) : (
         <div className="app-shell">
           <div className="panel-toggles">

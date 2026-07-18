@@ -1,11 +1,9 @@
 import React from "react";
 import GoogleSignin from "../img/google-button.png";
 
-const Welcome = () => {
+const Welcome = ({ onSignIn }) => {
   const blogUrl = "https://tech.timonwa.com/blog";
   const termsUrl = "https://tech.timonwa.com/terms";
-
-  const googleSignIn = () => {};
 
   return (
     <main className="welcome">
@@ -16,7 +14,7 @@ const Welcome = () => {
           Sign in with Google to chat with fellow React developers in public or
           private rooms.
         </p>
-        <button className="sign-in" type="button" onClick={googleSignIn}>
+        <button className="sign-in" type="button" onClick={onSignIn}>
           <img src={GoogleSignin} alt="sign in with google" />
         </button>
         <p className="welcome-disclaimer">
