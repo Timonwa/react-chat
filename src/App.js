@@ -17,8 +17,12 @@ function App() {
     isPrivate: false,
   });
 
-  // Ensure that the "general" room exists in Firestore when the app loads. If it doesn't exist, create it. If it does exist, fetch its data and set it as the active room.
+  // Ensure the "general" room exists in Firestore once the user is signed in.
+  // Gated on `user` because Firestore rules require auth — running this before
+  // sign-in would be denied with "Missing or insufficient permissions".
   useEffect(() => {
+    if (!user) return;
+
     const ensureGeneralRoom = async () => {
       const generalRef = doc(db, "rooms", "general");
       const generalSnap = await getDoc(generalRef);
@@ -40,7 +44,7 @@ function App() {
     };
 
     ensureGeneralRoom();
-  }, []);
+  }, [user]);
 
   // Which side panel is open as a drawer on small screens: "rooms" | "actions" | null.
   const [openPanel, setOpenPanel] = useState(null);
@@ -49,30 +53,6 @@ function App() {
     setActiveRoom(room);
     setOpenPanel(null); // close the drawer after picking a room on mobile
   };
-
-  useEffect(() => {
-    const ensureGeneralRoom = async () => {
-      const generalRef = doc(db, "rooms", "general");
-      const generalSnap = await getDoc(generalRef);
-      if (!generalSnap.exists()) {
-        await setDoc(generalRef, {
-          name: "General",
-          isPrivate: false,
-          createdAt: serverTimestamp(),
-          createdBy: "system",
-        });
-      } else {
-        const data = generalSnap.data();
-        setActiveRoom(prev => ({
-          ...prev,
-          name: data.name || "General",
-          isPrivate: Boolean(data.isPrivate),
-        }));
-      }
-    };
-
-    ensureGeneralRoom();
-  }, []);
 
   return (
     <div className="App">
