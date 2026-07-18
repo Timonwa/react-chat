@@ -2,6 +2,7 @@ import React from "react";
 import GoogleSignin from "../img/google-button.png";
 import { auth } from "../firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import CopyCode from "./CopyCode";
 
 const Welcome = () => {
   const blogUrl =
@@ -70,13 +71,13 @@ const Welcome = () => {
           <p>Try these pre-created private rooms to test the feature:</p>
           <div className="room-codes">
             <div className="room-code">
-              <strong>React Tips:</strong> <code>0695-RJ9I</code>
+              <strong>React Tips:</strong> <CopyCode code="0695-RJ9I" />
             </div>
             <div className="room-code">
-              <strong>Firebase Chat:</strong> <code>P8IB-A98Z</code>
+              <strong>Firebase Chat:</strong> <CopyCode code="P8IB-A98Z" />
             </div>
             <div className="room-code">
-              <strong>Modern UI:</strong> <code>64KN-6OXP</code>
+              <strong>Modern UI:</strong> <CopyCode code="64KN-6OXP" />
             </div>
           </div>
           <p className="room-code-note">

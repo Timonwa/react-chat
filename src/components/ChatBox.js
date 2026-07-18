@@ -9,6 +9,7 @@ import {
 import { db } from "../firebase";
 import Message from "./Message";
 import SendMessage from "./SendMessage";
+import CopyCode from "./CopyCode";
 
 const ChatBox = ({ activeRoom }) => {
   const [messages, setMessages] = useState([]);
@@ -61,6 +62,12 @@ const ChatBox = ({ activeRoom }) => {
           <h2>{roomLabel}</h2>
           <p>Share updates and keep the conversation moving.</p>
         </div>
+        {activeRoom?.isPrivate && activeRoom?.joinCode && (
+          <div className="chat-box__code">
+            <span className="chat-box__code-label">Room code</span>
+            <CopyCode code={activeRoom.joinCode} />
+          </div>
+        )}
       </header>
       <div className="messages-wrapper" ref={messagesRef}>
         {messages.length ? (

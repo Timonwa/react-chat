@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
+import CopyCode from "./CopyCode";
 
 const RoomsActionsPanel = ({ onSelectRoom, isOpen, onClose }) => {
   const [user] = useAuthState(auth);
@@ -109,6 +110,7 @@ const RoomsActionsPanel = ({ onSelectRoom, isOpen, onClose }) => {
       id: roomDoc.id,
       name: roomData.name || "Private room",
       isPrivate: true,
+      joinCode: roomData.joinCode,
     });
   };
 
@@ -158,7 +160,7 @@ const RoomsActionsPanel = ({ onSelectRoom, isOpen, onClose }) => {
           <p className="room-code-panel__title">Private room code</p>
           <div className="room-code-panel__code">
             <span>{createdRoomCode.name}</span>
-            <code>{createdRoomCode.code}</code>
+            <CopyCode code={createdRoomCode.code} />
           </div>
           <p className="room-code-panel__hint">
             Share this code so others can join your room.

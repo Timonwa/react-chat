@@ -253,6 +253,35 @@ button {
   color: var(--text-soft) !important;
 }
 
+/* copyable room codes */
+.copy-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.copy-code code {
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.copy-code:hover code {
+  filter: brightness(1.12);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.copy-code__status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #7fd9a6;
+  white-space: nowrap;
+}
+
 /* rooms panel */
 .rooms-panel {
   padding: 24px;
@@ -568,9 +597,35 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border-soft);
   margin-bottom: 16px;
+}
+
+.chat-box__code {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.chat-box__code-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+}
+
+.chat-box__code code {
+  background: rgba(244, 184, 106, 0.12);
+  color: var(--accent);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-family: "Space Grotesk", monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .chat-box__header h2 {
