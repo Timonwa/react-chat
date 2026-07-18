@@ -22,5 +22,5 @@ jobs:
             - name: Run cleanup
               env:
                   FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-                  PRESERVE_ROOM_IDS: "9PZo5Kj61VqX4pabCia0,TZnphwNN6J6PTRSD6gRu,WmtKxO1VXHhPrRqnj54b,ebwyFtktSwpg28Q9kga5,PQEcVFsO4uBqx5oRCWMQ"
+                  PRESERVE_ROOM_IDS: "general,9PZo5Kj61VqX4pabCia0,TZnphwNN6J6PTRSD6gRu,WmtKxO1VXHhPrRqnj54b,ebwyFtktSwpg28Q9kga5"
               run: npm run cleanup:monthly
