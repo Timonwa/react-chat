@@ -1,8 +1,9 @@
-import { admin, initAdmin } from "./firebaseAdmin";
+import { initAdmin } from "./firebaseAdmin.mjs";
+import { getFirestore } from "firebase-admin/firestore";
 
 initAdmin();
 
-const db = admin.firestore();
+const db = getFirestore();
 const pageSize = Number(process.env.PAGE_SIZE || 400);
 const preserveIds = (process.env.PRESERVE_ROOM_IDS || "")
   .split(",")
