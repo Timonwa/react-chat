@@ -4,7 +4,8 @@ import { auth } from "../firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const Welcome = () => {
-  const blogUrl = "https://tech.timonwa.com/blog";
+  const blogUrl =
+    "https://tech.timonwa.com/blog/create-multi-room-chat-app-using-react-firebase";
   const termsUrl = "https://tech.timonwa.com/terms";
 
   const googleSignIn = () => {
@@ -15,7 +16,7 @@ const Welcome = () => {
   return (
     <main className="welcome">
       <div className="welcome-card">
-        <span className="welcome-tag">Demo refreshed on Feb 2026</span>
+        <span className="welcome-tag">Updated for React 19 + Firebase v12</span>
         <h2>Welcome to React Chat.</h2>
         <p>
           Sign in with Google to chat with fellow React developers in public or
@@ -29,14 +30,21 @@ const Welcome = () => {
           <a href={blogUrl} target="_blank" rel="noreferrer">
             2026 walkthrough
           </a>{" "}
-          is on my blog. Looking for the original 2023 FreeCodeCamp tutorial?{" "}
+          is on my blog. Looking for the original 2023 version?{" "}
+          <a
+            href="https://tech.timonwa.com/blog/building-a-real-time-chat-app-with-reactjs-and-firebase"
+            target="_blank"
+            rel="noreferrer">
+            Read it on my blog
+          </a>{" "}
+          (originally published on{" "}
           <a
             href="https://www.freecodecamp.org/news/building-a-real-time-chat-app-with-reactjs-and-firebase/"
             target="_blank"
             rel="noreferrer">
-            Read it here
-          </a>{" "}
-          and use the legacy code on the{" "}
+            freeCodeCamp
+          </a>
+          ), and use the legacy code on the{" "}
           <a
             href="https://github.com/Timonwa/react-chat/tree/freecodecamp-original"
             target="_blank"
